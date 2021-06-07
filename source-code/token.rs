@@ -1,6 +1,10 @@
 // TODO: Review.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Token {
+    // TODO: Remove or use another enumeration, such as:
+    //
+    //  Keyword(KeywordToken)
+    //  KeywordToken { Public, Private, Static, Dim, ... }
     Keyword(Vec<u8>),
     Identifier(Vec<u8>),
 
