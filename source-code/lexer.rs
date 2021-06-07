@@ -77,6 +77,7 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
         "sub" => Token::Sub,
         "function" => Token::Function,
         "type" => Token::Type,
+        "const" => Token::Const,
         "end" => Token::End,
 
         "do" => Token::Do,
@@ -211,6 +212,7 @@ fn lex_symbol(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<Token
         ('>', '=') => Some(Token::GreaterOrEqual),
         ('>', _) => Some(Token::Greater),
 
+        ('=', _) => Some(Token::Assignment),
         ('.', _) => Some(Token::Dot),
 
         (_, _) => None,

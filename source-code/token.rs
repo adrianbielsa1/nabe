@@ -17,6 +17,7 @@ pub enum Token {
     Sub,
     Function,
     Type,
+    Const,
     End,
 
     Do,
@@ -49,6 +50,7 @@ pub enum Token {
     Greater,
     GreaterOrEqual,
 
+    Assignment,
     Dot,
 }
 
