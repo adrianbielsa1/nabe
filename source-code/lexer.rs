@@ -1,4 +1,4 @@
-use crate::token::Token;
+use crate::Token;
 
 // TODO: Replace return type with a `Result`.
 pub fn lex(characters: &Vec<u8>) -> Vec<Token> {
