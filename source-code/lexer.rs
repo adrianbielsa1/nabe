@@ -1,7 +1,3 @@
-// TODO: Remove.
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-
 use crate::token::Token;
 
 // TODO: Replace return type with a `Result`.
