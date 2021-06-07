@@ -101,8 +101,6 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
     return true;
 }
 
-// NOTE: This function only analyzes integer numbers. Conversion to real numbers happens at the
-// parsing phase.
 fn lex_number(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<Token>) -> bool {
     let mut character = characters[*position] as char;
 
@@ -121,6 +119,28 @@ fn lex_number(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<Token
 
         // Count the previous character.
         length += 1;
+    }
+
+    // TODO: This is a workaround to also lex numbers that have a decimal part.
+    // We should add bounds checks here, and analyze if the construction of
+    // decimal numbers should happen at the lexing stage or at the parsing
+    // stage of the compiler.
+    if characters[*position + length] as char == '.' {
+        // TODO: Add bounds checks here!
+        if (characters[*position + length + 1] as char).is_numeric() {
+            length += 2;
+
+            while (*position + length) < characters.len() {
+                // Peek the next character.
+                character = characters[*position + length] as char;
+
+                // Analyze the next character.
+                if !(character.is_numeric()) { break; }
+
+                // Count the previous character.
+                length += 1;
+            }
+        }
     }
 
     let lexeme = characters[*position..*position + length].to_vec();
