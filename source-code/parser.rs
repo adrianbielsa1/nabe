@@ -6,6 +6,7 @@ use crate::VariableStatement;
 use crate::ConstantStatement;
 use crate::SubroutineStatement;
 use crate::FunctionStatement;
+use crate::ExitStatement;
 use crate::ArgumentStatement;
 use crate::AssignmentStatement;
 use crate::ReturnStatement;
@@ -262,7 +263,7 @@ impl<'a> Parser<'a> {
     fn parse_callable_body(&mut self) -> Vec<Statement> {
         let parsers = [
             Parser::parse_variable, Parser::parse_constant, Parser::parse_assignment,
-            Parser::parse_return,
+            Parser::parse_exit, Parser::parse_return,
         ];
 
         let mut statements = vec!();
@@ -308,6 +309,22 @@ impl<'a> Parser<'a> {
         return Some(Statement::Assignment(AssignmentStatement {
             left: left,
             right: Box::new(right),
+        }));
+    }
+
+    fn parse_exit(&mut self) -> Option<Statement> {
+        let _ = self.consume(Token::Exit)?;
+
+        // TODO: Complete with `For`, `While`, etc.
+        let possible_blocks = [
+            Token::Sub, Token::Function,
+        ];
+
+        // NOTE: See `parse_variable`.
+        let block = std::array::IntoIter::new(possible_blocks).find_map(|t| self.consume(t))?;
+
+        return Some(Statement::Exit(ExitStatement {
+            block: block,
         }));
     }
 

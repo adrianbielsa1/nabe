@@ -80,6 +80,7 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
         "const" => Token::Const,
         "end" => Token::End,
 
+        "exit" => Token::Exit,
         "return" => Token::Return,
 
         "do" => Token::Do,

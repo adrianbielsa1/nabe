@@ -24,6 +24,7 @@ pub enum Token {
     Const,
     End,
 
+    Exit,
     Return,
 
     Do,
@@ -79,6 +80,7 @@ impl Token {
             Token::Type => b"type".to_vec(),
             Token::End => b"end".to_vec(),
 
+            Token::Exit => b"exit".to_vec(),
             Token::Return => b"return".to_vec(),
 
             Token::LeftParentheses => b"(".to_vec(),

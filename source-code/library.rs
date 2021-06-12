@@ -21,6 +21,7 @@ pub use statement::VariableStatement;
 pub use statement::ConstantStatement;
 pub use statement::SubroutineStatement;
 pub use statement::FunctionStatement;
+pub use statement::ExitStatement;
 pub use statement::ArgumentStatement;
 pub use statement::AssignmentStatement;
 pub use statement::ReturnStatement;

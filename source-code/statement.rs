@@ -18,6 +18,7 @@ pub enum Statement {
     Constant(ConstantStatement),
     Subroutine(SubroutineStatement),
     Function(FunctionStatement),
+    Exit(ExitStatement),
     Argument(ArgumentStatement),
     Assignment(AssignmentStatement),
     Return(ReturnStatement),
@@ -65,6 +66,11 @@ pub struct FunctionStatement {
     pub arguments: Vec<Statement>,
     pub kind: Option<Token>,
     pub body: Vec<Statement>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ExitStatement {
+    pub block: Token,
 }
 
 #[derive(Clone, Debug, PartialEq)]
