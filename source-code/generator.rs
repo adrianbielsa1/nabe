@@ -239,7 +239,7 @@ impl Generator {
         let mut generated_code = String::new();
 
         generated_code.push_str(&String::from_utf8_lossy(&data.scope.get_lexeme()));
-        generated_code.push_str(" ");
+        generated_code.push_str(" const ");
         generated_code.push_str(&String::from_utf8_lossy(&data.name.get_lexeme()));
 
         // TODO: This seems too imperative.
