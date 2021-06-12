@@ -32,7 +32,7 @@ pub struct TypeStatement {
 #[derive(Clone, Debug, PartialEq)]
 pub struct TypeAttributeStatement {
     pub name: Token,
-    pub kind: Token,
+    pub kind: Token, // TODO: Should this be Option<Token>?
 }
 
 #[derive(Clone, Debug, PartialEq)]
