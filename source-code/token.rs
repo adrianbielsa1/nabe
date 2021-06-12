@@ -69,6 +69,11 @@ impl Token {
             Token::Keyword(lexeme) | Token::Identifier(lexeme) => lexeme.clone(),
             Token::Number(lexeme) | Token::String(lexeme) => lexeme.clone(),
 
+            Token::Public => b"public".to_vec(),
+            Token::Private => b"private".to_vec(),
+            Token::Static => b"static".to_vec(),
+            Token::Dim => b"dim".to_vec(),
+
             Token::As => b"as".to_vec(),
             Token::If => b"if".to_vec(),
             Token::Type => b"type".to_vec(),
