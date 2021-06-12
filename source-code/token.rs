@@ -69,8 +69,12 @@ impl Token {
             Token::Keyword(lexeme) | Token::Identifier(lexeme) => lexeme.clone(),
             Token::Number(lexeme) | Token::String(lexeme) => lexeme.clone(),
 
+            Token::As => b"as".to_vec(),
             Token::If => b"if".to_vec(),
+            Token::Type => b"type".to_vec(),
             Token::End => b"end".to_vec(),
+
+            Token::Return => b"return".to_vec(),
 
             Token::LeftParentheses => b"(".to_vec(),
             Token::RightParentheses => b")".to_vec(),
