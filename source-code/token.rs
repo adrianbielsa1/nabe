@@ -24,6 +24,8 @@ pub enum Token {
     Const,
     End,
 
+    Return,
+
     Do,
     Loop,
 
