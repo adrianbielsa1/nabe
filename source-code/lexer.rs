@@ -145,7 +145,7 @@ fn lex_number(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<Token
     }
 
     let lexeme = characters[*position..*position + length].to_vec();
-    let token = Token::Identifier(lexeme);
+    let token = Token::Number(lexeme);
 
     tokens.push(token);
     *position += length;
