@@ -77,6 +77,8 @@ impl Token {
 
             Token::As => b"as".to_vec(),
             Token::If => b"if".to_vec(),
+            Token::Sub => b"sub".to_vec(),
+            Token::Function => b"function".to_vec(),
             Token::Type => b"type".to_vec(),
             Token::End => b"end".to_vec(),
 
