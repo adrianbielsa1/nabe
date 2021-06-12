@@ -4,6 +4,8 @@ mod token;
 mod parser;
 mod statement;
 
+mod transformer;
+
 mod viewer;
 
 pub use lexer::lex;
@@ -20,5 +22,7 @@ pub use statement::FunctionStatement;
 pub use statement::ArgumentStatement;
 pub use statement::AssignmentStatement;
 pub use statement::ReturnStatement;
+
+pub use transformer::transform;
 
 pub use viewer::Viewer;
