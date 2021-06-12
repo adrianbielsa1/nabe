@@ -8,46 +8,78 @@ pub enum Statement {
     // TODO: Needed?
     Program,
 
-    Type {
-        name: Token,
-        attributes: Vec<Statement>,
-    },
+    // NOTE: The statement's information is often encapsulated
+    // into structs because destructuring the variant while
+    // pattern matching becomes really cumbersome when there are
+    // multiple attributes to destructure.
+    Type(TypeStatement),
+    TypeAttribute(TypeAttributeStatement),
+    Variable(VariableStatement),
+    Constant(ConstantStatement),
+    Subroutine(SubroutineStatement),
+    Function(FunctionStatement),
+    Argument(ArgumentStatement),
+    Assignment(AssignmentStatement),
+    Return(ReturnStatement),
+}
 
-    TypeAttribute {
-        name: Token,
-        kind: Token,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct TypeStatement {
+    pub name: Token,
+    pub attributes: Vec<Statement>,
+}
 
-    Variable {
-        scope: Token,
-        name: Token,
-        kind: Token,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct TypeAttributeStatement {
+    pub name: Token,
+    pub kind: Token,
+}
 
-    Constant {
-        scope: Token,
-        name: Token,
-        kind: Option<Token>,
-        value: Token,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct VariableStatement {
+    pub scope: Token,
+    pub name: Token,
+    pub kind: Token,
+}
 
-    Subroutine {
-        scope: Token,
-        name: Token,
-        arguments: Vec<Statement>,
-        body: Vec<Statement>,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct ConstantStatement {
+    pub scope: Token,
+    pub name: Token,
+    pub kind: Option<Token>,
+    pub value: Token,
+}
 
-    Function {
-        scope: Token,
-        name: Token,
-        arguments: Vec<Statement>,
-        kind: Option<Token>,
-        body: Vec<Statement>,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct SubroutineStatement {
+    pub scope: Token,
+    pub name: Token,
+    pub arguments: Vec<Statement>,
+    pub body: Vec<Statement>,
+}
 
-    Argument {
-        name: Token,
-        kind: Token,
-    },
+#[derive(Clone, Debug, PartialEq)]
+pub struct FunctionStatement {
+    pub scope: Token,
+    pub name: Token,
+    pub arguments: Vec<Statement>,
+    pub kind: Option<Token>,
+    pub body: Vec<Statement>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ArgumentStatement {
+    pub name: Token,
+    pub kind: Token,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct AssignmentStatement {
+    pub left: Token,
+    pub right: Box<Token>, // TODO: This should be `Box<Statement>`.
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ReturnStatement {
+    pub value: Option<Token>, // TODO: This should be `Option<Box<Statement>>`.
 }

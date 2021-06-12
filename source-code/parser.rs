@@ -1,5 +1,14 @@
 use crate::Token;
 use crate::Statement;
+use crate::TypeStatement;
+use crate::TypeAttributeStatement;
+use crate::VariableStatement;
+use crate::ConstantStatement;
+use crate::SubroutineStatement;
+use crate::FunctionStatement;
+use crate::ArgumentStatement;
+use crate::AssignmentStatement;
+use crate::ReturnStatement;
 
 struct Parser<'a> {
     tokens: &'a Vec<Token>,
@@ -83,10 +92,10 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::End)?;
         let _ = self.consume(Token::Type)?;
 
-        return Some(Statement::Type {
+        return Some(Statement::Type(TypeStatement {
             name: name,
             attributes: attributes,
-        });
+        }));
     }
 
     fn parse_type_attribute(&mut self) -> Option<Statement> {
@@ -95,10 +104,10 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::As)?;
         let kind = self.consume(Token::Identifier(vec!()))?;
 
-        return Some(Statement::TypeAttribute {
+        return Some(Statement::TypeAttribute(TypeAttributeStatement {
             name: name,
             kind: kind,
-        });
+        }));
     }
 
     fn parse_variable(&mut self) -> Option<Statement> {
@@ -116,11 +125,11 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::As)?;
         let kind = self.consume(Token::Identifier(vec!()))?;
 
-        return Some(Statement::Variable {
+        return Some(Statement::Variable(VariableStatement {
             scope: scope.clone(),
             name: name,
             kind: kind,
-        });
+        }));
     }
 
     fn parse_constant(&mut self) -> Option<Statement> {
@@ -149,12 +158,12 @@ impl<'a> Parser<'a> {
         // NOTE: See `parse_variable`.
         let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
 
-        return Some(Statement::Constant {
+        return Some(Statement::Constant(ConstantStatement {
             scope: scope.clone(),
             name: name,
             kind: kind,
             value: value,
-        });
+        }));
     }
 
     fn parse_subroutine(&mut self) -> Option<Statement> {
@@ -184,12 +193,12 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::End)?;
         let _ = self.consume(Token::Sub)?;
 
-        return Some(Statement::Subroutine {
+        return Some(Statement::Subroutine(SubroutineStatement {
             scope: scope,
             name: name,
             arguments: arguments,
             body: body,
-        });
+        }));
     }
 
     fn parse_function(&mut self) -> Option<Statement> {
@@ -224,13 +233,13 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::End)?;
         let _ = self.consume(Token::Function)?;
 
-        return Some(Statement::Function {
+        return Some(Statement::Function(FunctionStatement {
             scope: scope,
             name: name,
             arguments: arguments,
             kind: kind,
             body: body,
-        });
+        }));
     }
 
     // Used for both functions and subroutines.
@@ -243,16 +252,17 @@ impl<'a> Parser<'a> {
         let _ = self.consume(Token::As)?;
         let kind = self.consume(Token::Identifier(vec!()))?;
 
-        return Some(Statement::Argument {
+        return Some(Statement::Argument(ArgumentStatement {
             name: name,
             kind: kind,
-        });
+        }));
     }
 
     // Used for both functions and subroutines.
     fn parse_callable_body(&mut self) -> Vec<Statement> {
         let parsers = [
-            Parser::parse_variable, Parser::parse_constant,
+            Parser::parse_variable, Parser::parse_constant, Parser::parse_assignment,
+            Parser::parse_return,
         ];
 
         let mut statements = vec!();
@@ -279,6 +289,42 @@ impl<'a> Parser<'a> {
         }
 
         return statements;
+    }
+
+    fn parse_assignment(&mut self) -> Option<Statement> {
+        // TODO: Remove `vec!`.
+        let left = self.consume(Token::Identifier(vec!()))?;
+        let _ = self.consume(Token::Assignment)?;
+
+        // TODO: Use `parse_expression`.
+        // TODO: Remove `vec!`.
+        let possible_values = [
+            Token::Identifier(vec!()), Token::Number(vec!()), Token::String(vec!())
+        ];
+
+        // NOTE: See `parse_variable`.
+        let right = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
+
+        return Some(Statement::Assignment(AssignmentStatement {
+            left: left,
+            right: Box::new(right),
+        }));
+    }
+
+    fn parse_return(&mut self) -> Option<Statement> {
+        let _ = self.consume(Token::Return)?;
+
+        // TODO: Remove `vec!`.
+        let possible_values = [
+            Token::Identifier(vec!()), Token::Number(vec!()), Token::String(vec!())
+        ];
+
+        // NOTE: See `parse_variable`.
+        let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t));
+
+        return Some(Statement::Return(ReturnStatement {
+            value: value,
+        }));
     }
 }
 
