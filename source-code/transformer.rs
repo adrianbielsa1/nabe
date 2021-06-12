@@ -6,6 +6,7 @@ use crate::VariableStatement;
 use crate::ConstantStatement;
 use crate::SubroutineStatement;
 use crate::FunctionStatement;
+use crate::ExitStatement;
 use crate::ArgumentStatement;
 use crate::AssignmentStatement;
 use crate::ReturnStatement;
@@ -66,21 +67,26 @@ impl Transformer {
         let mut viewer = Viewer::new(body);
 
         while let Some(statement) = viewer.next() {
-            let transformed_statement = match statement {
+            let mut transformed_statement = match statement {
                 Statement::Return(data) => self.transform_function_return(data),
 
                 // No transformation aplicable.
-                _ => statement,
+                _ => vec!(statement),
             };
 
-            transformed_statements.push(transformed_statement);
+            // TODO: Use `Vec::push`?
+            transformed_statements.append(&mut transformed_statement);
         }
 
         return transformed_statements;
     }
 
-    fn transform_function_return(&mut self, data: ReturnStatement) -> Statement {
-        return Statement::Assignment(AssignmentStatement {
+    fn transform_function_return(&mut self, data: ReturnStatement) -> Vec<Statement> {
+        let mut transformed_statements = vec!();
+
+        transformed_statements.push(Statement::Assignment(AssignmentStatement {
+            // TODO: Make sure `self.blocks` only contains methods/functions/subroutines
+            // names, and not loops or other kind of blocks.
             left: self.blocks.last().unwrap().name.clone(),
 
             // NOTE: I unwrap thee because the parser should have already
@@ -90,7 +96,13 @@ impl Transformer {
             // Failing to do so means the parser is broken, and panicking
             // is a good way (TODO: or not?) to signal it.
             right: Box::new(data.value.unwrap()),
-        });
+        }));
+
+        transformed_statements.push(Statement::Exit(ExitStatement {
+            block: Token::Function,
+        }));
+
+        return transformed_statements;
     }
 }
 
