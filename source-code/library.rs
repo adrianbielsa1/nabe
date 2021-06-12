@@ -6,6 +6,8 @@ mod statement;
 
 mod transformer;
 
+mod generator;
+
 mod viewer;
 
 pub use lexer::lex;
@@ -24,5 +26,7 @@ pub use statement::AssignmentStatement;
 pub use statement::ReturnStatement;
 
 pub use transformer::transform;
+
+pub use generator::generate;
 
 pub use viewer::Viewer;
