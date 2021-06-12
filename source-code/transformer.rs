@@ -28,6 +28,23 @@ impl Transformer {
         };
     }
 
+    pub fn transform(&mut self) -> Vec<Statement> {
+        let mut transformed_statements = vec!();
+
+        while let Some(statement) = self.statements.next() {
+            let transformed_statement = match statement {
+                Statement::Function(data) => self.transform_function(data),
+
+                // No transformation aplicable.
+                _ => statement,
+            };
+
+            transformed_statements.push(transformed_statement);
+        }
+
+        return transformed_statements;
+    }
+
     fn transform_function(&mut self, data: FunctionStatement) -> Statement {
         self.blocks.push(Block { name: data.name.clone() });
 
@@ -74,23 +91,6 @@ impl Transformer {
             // is a good way (TODO: or not?) to signal it.
             right: Box::new(data.value.unwrap()),
         });
-    }
-
-    pub fn transform(&mut self) -> Vec<Statement> {
-        let mut transformed_statements = vec!();
-
-        while let Some(statement) = self.statements.next() {
-            let transformed_statement = match statement {
-                Statement::Function(data) => self.transform_function(data),
-
-                // No transformation aplicable.
-                _ => statement,
-            };
-
-            transformed_statements.push(transformed_statement);
-        }
-
-        return transformed_statements;
     }
 }
 
