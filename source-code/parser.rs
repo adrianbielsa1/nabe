@@ -118,7 +118,7 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_enum(&mut self) -> Option<Statement> {
-        let possible_scopes = [Token::Public, Token::Private, Token::Static, Token::Dim];
+        let possible_scopes = [Token::Public, Token::Private];
 
         // NOTE: See `parse_variable`.
         let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t));
