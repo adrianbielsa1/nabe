@@ -17,6 +17,8 @@ pub use parser::parse;
 pub use statement::Statement;
 pub use statement::TypeStatement;
 pub use statement::TypeAttributeStatement;
+pub use statement::EnumStatement;
+pub use statement::EnumAttributeStatement;
 pub use statement::VariableStatement;
 pub use statement::ConstantStatement;
 pub use statement::SubroutineStatement;

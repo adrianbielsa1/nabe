@@ -1,6 +1,8 @@
 use crate::Statement;
 use crate::TypeStatement;
 use crate::TypeAttributeStatement;
+use crate::EnumStatement;
+use crate::EnumAttributeStatement;
 use crate::VariableStatement;
 use crate::ConstantStatement;
 use crate::SubroutineStatement;
@@ -31,6 +33,7 @@ impl Generator {
                 Statement::Subroutine(data) => self.generate_subroutine(&data),
                 Statement::Function(data) => self.generate_function(&data),
                 Statement::Type(data) => self.generate_type(&data),
+                Statement::Enum(data) => self.generate_enum(&data),
                 Statement::Variable(data) => self.generate_variable(&data),
 
                 // TODO: Handle all cases.
@@ -209,6 +212,44 @@ impl Generator {
         }
 
         generated_code.push_str("end type\n");
+
+        return generated_code;
+    }
+
+    fn generate_enum(&mut self, data: &EnumStatement) -> String {
+        let mut generated_code = String::new();
+
+        if let Some(scope) = &data.scope {
+            generated_code.push_str(&String::from_utf8_lossy(&scope.get_lexeme()));
+            generated_code.push(' ');
+        }
+
+        generated_code.push_str("enum ");
+        generated_code.push_str(&String::from_utf8_lossy(&data.name.get_lexeme()));
+        generated_code.push('\n');
+
+        for statement in &data.attributes {
+            match statement {
+                // TODO: This seems too imperative.
+                Statement::EnumAttribute(data) => {
+                    generated_code.push_str(&String::from_utf8_lossy(&data.name.get_lexeme()));
+
+                    if let Some(value) = &data.value {
+                        generated_code.push_str(" = ");
+                        generated_code.push_str(&String::from_utf8_lossy(&value.get_lexeme()));
+                    }
+
+                    generated_code.push('\n');
+                },
+
+                // TODO: Is it correct to `panic`?
+                //
+                // TODO: Add a message?
+                _ => unreachable!(),
+            }
+        }
+
+        generated_code.push_str("end enum\n");
 
         return generated_code;
     }

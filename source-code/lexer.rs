@@ -106,6 +106,7 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
         "sub" => Token::Sub,
         "function" => Token::Function,
         "type" => Token::Type,
+        "enum" => Token::Enum,
         "const" => Token::Const,
         "end" => Token::End,
 

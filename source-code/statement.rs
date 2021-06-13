@@ -14,6 +14,8 @@ pub enum Statement {
     // multiple attributes to destructure.
     Type(TypeStatement),
     TypeAttribute(TypeAttributeStatement),
+    Enum(EnumStatement),
+    EnumAttribute(EnumAttributeStatement),
     Variable(VariableStatement),
     Constant(ConstantStatement),
     Subroutine(SubroutineStatement),
@@ -34,6 +36,19 @@ pub struct TypeStatement {
 pub struct TypeAttributeStatement {
     pub name: Token,
     pub kind: Token, // TODO: Should this be Option<Token>?
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct EnumStatement {
+    pub scope: Option<Token>,
+    pub name: Token,
+    pub attributes: Vec<Statement>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct EnumAttributeStatement {
+    pub name: Token,
+    pub value: Option<Token>,
 }
 
 #[derive(Clone, Debug, PartialEq)]

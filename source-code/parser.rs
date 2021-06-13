@@ -2,6 +2,8 @@ use crate::Token;
 use crate::Statement;
 use crate::TypeStatement;
 use crate::TypeAttributeStatement;
+use crate::EnumStatement;
+use crate::EnumAttributeStatement;
 use crate::VariableStatement;
 use crate::ConstantStatement;
 use crate::SubroutineStatement;
@@ -27,7 +29,7 @@ impl<'a> Parser<'a> {
     pub fn parse(&mut self) -> Vec<Statement> {
         let parsers = [
             Parser::parse_type, Parser::parse_variable, Parser::parse_constant,
-            Parser::parse_subroutine, Parser::parse_function,
+            Parser::parse_subroutine, Parser::parse_function, Parser::parse_enum,
         ];
 
         let mut statements = vec!();
@@ -112,6 +114,51 @@ impl<'a> Parser<'a> {
         return Some(Statement::TypeAttribute(TypeAttributeStatement {
             name: name,
             kind: kind,
+        }));
+    }
+
+    fn parse_enum(&mut self) -> Option<Statement> {
+        let possible_scopes = [Token::Public, Token::Private, Token::Static, Token::Dim];
+
+        // NOTE: See `parse_variable`.
+        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t));
+
+        // Assert there is a `Enum` keyword and a identifier containing the
+        // enumeration's name.
+        let _ = self.consume(Token::Enum)?;
+
+        // TODO: Remove `vec!`.
+        let name = self.consume(Token::Identifier(vec!()))?;
+
+        let mut attributes = vec!();
+
+        while let Some(attribute) = self.parse_enum_attribute() {
+            attributes.push(attribute);
+        }
+
+        // Assert there are the `End Enum` keywords.
+        let _ = self.consume(Token::End)?;
+        let _ = self.consume(Token::Enum)?;
+
+        return Some(Statement::Enum(EnumStatement {
+            scope: scope,
+            name: name,
+            attributes: attributes,
+        }));
+    }
+
+    fn parse_enum_attribute(&mut self) -> Option<Statement> {
+        // TODO: Remove `vec!`.
+        let name = self.consume(Token::Identifier(vec!()))?;
+
+        let value = match self.consume(Token::Assignment) {
+            Some(_) => Some(self.consume(Token::Number(vec!()))?),
+            None => None,
+        };
+
+        return Some(Statement::EnumAttribute(EnumAttributeStatement {
+            name: name,
+            value: value,
         }));
     }
 

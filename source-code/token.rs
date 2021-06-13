@@ -21,6 +21,7 @@ pub enum Token {
     Sub,
     Function,
     Type,
+    Enum,
     Const,
     End,
 
