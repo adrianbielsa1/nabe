@@ -56,23 +56,27 @@ impl<'a> Parser<'a> {
         return statements;
     }
 
+    fn compare(first: &Token, second: &Token) -> bool {
+        // TODO: Use a library (`strum`?).
+        let left_discriminant = std::mem::discriminant(first);
+        let right_discriminant = std::mem::discriminant(second);
+
+        return left_discriminant == right_discriminant;
+    }
+
     fn consume(&mut self, expected_token: Token) -> Option<Token> {
         if self.tokens_position >= self.tokens.len() {
             return None;
         }
 
-        // TODO: Use a library (`strum`?).
-        let left_discriminant = std::mem::discriminant(&self.tokens[self.tokens_position]);
-        let right_discriminant = std::mem::discriminant(&expected_token);
+        if Self::compare(&self.tokens[self.tokens_position], &expected_token) {
+            self.tokens_position += 1;
 
-        if left_discriminant != right_discriminant {
+            // TODO: Cloning here!
+            return Some(self.tokens[self.tokens_position - 1].clone());
+        } else {
             return None;
         }
-
-        self.tokens_position += 1;
-
-        // TODO: Cloning here!
-        return Some(self.tokens[self.tokens_position - 1].clone());
     }
 
     fn parse_type(&mut self) -> Option<Statement> {
