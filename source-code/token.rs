@@ -16,6 +16,9 @@ pub enum Token {
     Static,
     Dim,
 
+    ByVal,
+    ByRef,
+
     As,
     If,
     Sub,
@@ -75,6 +78,9 @@ impl Token {
             Token::Private => b"private".to_vec(),
             Token::Static => b"static".to_vec(),
             Token::Dim => b"dim".to_vec(),
+
+            Token::ByVal => b"byval".to_vec(),
+            Token::ByRef => b"byref".to_vec(),
 
             Token::As => b"as".to_vec(),
             Token::If => b"if".to_vec(),

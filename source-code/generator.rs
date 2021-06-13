@@ -257,6 +257,11 @@ impl Generator {
     fn generate_argument(&mut self, data: &ArgumentStatement) -> String {
         let mut generated_code = String::new();
 
+        if let Some(modifier) = &data.modifier {
+            generated_code.push_str(&String::from_utf8_lossy(&modifier.get_lexeme()));
+            generated_code.push(' ');
+        }
+
         generated_code.push_str(&String::from_utf8_lossy(&data.name.get_lexeme()));
         generated_code.push_str(" as ");
         generated_code.push_str(&String::from_utf8_lossy(&data.kind.get_lexeme()));

@@ -101,6 +101,9 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
         "static" => Token::Static,
         "dim" => Token::Dim,
 
+        "byval" => Token::ByVal,
+        "byref" => Token::ByRef,
+
         "as" => Token::As,
         "if" => Token::If,
         "sub" => Token::Sub,

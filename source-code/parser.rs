@@ -296,8 +296,10 @@ impl<'a> Parser<'a> {
 
     // Used for both functions and subroutines.
     fn parse_callable_argument(&mut self) -> Option<Statement> {
-        // TODO: Use `possible_modifiers` to check if there is a `ByRef` or `ByVal`
-        // keyword before the argument's name. Otherwise default to `ByRef`.
+        let possible_modifiers = [Token::ByVal, Token::ByRef,];
+
+        // NOTE: See `parse_variable`.
+        let modifier = std::array::IntoIter::new(possible_modifiers).find_map(|t| self.consume(t));
 
         // TODO: Remove `vec!`.
         let name = self.consume(Token::Identifier(vec!()))?;
@@ -305,6 +307,7 @@ impl<'a> Parser<'a> {
         let kind = self.consume(Token::Identifier(vec!()))?;
 
         return Some(Statement::Argument(ArgumentStatement {
+            modifier: modifier,
             name: name,
             kind: kind,
         }));

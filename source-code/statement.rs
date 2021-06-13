@@ -90,6 +90,7 @@ pub struct ExitStatement {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ArgumentStatement {
+    pub modifier: Option<Token>,
     pub name: Token,
     pub kind: Token,
 }
