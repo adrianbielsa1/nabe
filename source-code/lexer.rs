@@ -7,6 +7,7 @@ pub fn lex(characters: &Vec<u8>) -> Vec<Token> {
 
     while position < characters.len() {
         // NOTE: Order here is useful to prioritize, we want the lexeme to be as big as possible.
+        if lex_comment(&characters, &mut position, &mut tokens) { continue; }
         if lex_whitespace(&characters, &mut position, &mut tokens) { continue; }
         if lex_identifier(&characters, &mut position, &mut tokens) { continue; }
         if lex_number(&characters, &mut position, &mut tokens) { continue; }
@@ -18,6 +19,34 @@ pub fn lex(characters: &Vec<u8>) -> Vec<Token> {
     }
 
     return tokens;
+}
+
+// TODO: Handle multiline comments (through the underscore character).
+// Or is it a parser matter?
+fn lex_comment(characters: &Vec<u8>, position: &mut usize, _tokens: &mut Vec<Token>) -> bool {
+    let mut character = characters[*position] as char;
+
+    if character != '\'' { return false; }
+
+    // Count the first character.
+    let mut length = 1usize;
+
+    while (*position + length) < characters.len() {
+        // Peek the next character.
+        character = characters[*position + length] as char;
+
+        // Analyze the next character.
+        if character == '\n' { break; }
+
+        // Count the previous character.
+        length += 1;
+    }
+
+    // NOTE: Comment tokens are not saved because handling them would increase
+    // the complexity of the parser which isn't my goal as of now.
+    *position += length;
+
+    return true;
 }
 
 fn lex_whitespace(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<Token>) -> bool {
