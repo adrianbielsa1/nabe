@@ -12,6 +12,7 @@ use crate::ExitStatement;
 use crate::ArgumentStatement;
 use crate::AssignmentStatement;
 use crate::ReturnStatement;
+use crate::AttributeStatement;
 
 struct Parser<'a> {
     tokens: &'a Vec<Token>,
@@ -30,6 +31,7 @@ impl<'a> Parser<'a> {
         let parsers = [
             Parser::parse_type, Parser::parse_variable, Parser::parse_constant,
             Parser::parse_subroutine, Parser::parse_function, Parser::parse_enum,
+            Parser::parse_attribute,
         ];
 
         let mut statements = vec!();
@@ -317,7 +319,7 @@ impl<'a> Parser<'a> {
     fn parse_callable_body(&mut self) -> Vec<Statement> {
         let parsers = [
             Parser::parse_variable, Parser::parse_constant, Parser::parse_assignment,
-            Parser::parse_exit, Parser::parse_return,
+            Parser::parse_exit, Parser::parse_return, Parser::parse_attribute,
         ];
 
         let mut statements = vec!();
@@ -394,6 +396,26 @@ impl<'a> Parser<'a> {
         let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t));
 
         return Some(Statement::Return(ReturnStatement {
+            value: value,
+        }));
+    }
+
+    fn parse_attribute(&mut self) -> Option<Statement> {
+        let _ = self.consume(Token::Attribute)?;
+        let name = self.consume(Token::Identifier(vec!()))?;
+        let _ = self.consume(Token::Assignment)?;
+
+        // TODO: Use `parse_expression`?
+        // TODO: Remove `vec!`.
+        let possible_values = [
+            Token::Identifier(vec!()), Token::Number(vec!()), Token::String(vec!())
+        ];
+
+        // NOTE: See `parse_variable`.
+        let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
+
+        return Some(Statement::Attribute(AttributeStatement {
+            name: name,
             value: value,
         }));
     }

@@ -27,6 +27,7 @@ pub use statement::ExitStatement;
 pub use statement::ArgumentStatement;
 pub use statement::AssignmentStatement;
 pub use statement::ReturnStatement;
+pub use statement::AttributeStatement;
 
 pub use transformer::transform;
 

@@ -24,6 +24,7 @@ pub enum Statement {
     Argument(ArgumentStatement),
     Assignment(AssignmentStatement),
     Return(ReturnStatement),
+    Attribute(AttributeStatement),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -104,4 +105,12 @@ pub struct AssignmentStatement {
 #[derive(Clone, Debug, PartialEq)]
 pub struct ReturnStatement {
     pub value: Option<Token>, // TODO: This should be `Option<Box<Statement>>`.
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct AttributeStatement {
+    // TODO: This should be a `Box<Statement>` since `name` could be a field
+    // (i.e. `something.like.this`).
+    pub name: Token,
+    pub value: Token,
 }

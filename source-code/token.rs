@@ -63,6 +63,9 @@ pub enum Token {
 
     Assignment,
     Dot,
+
+    // Metadata.
+    Attribute,
 }
 
 
@@ -105,6 +108,8 @@ impl Token {
             Token::GreaterOrEqual => b">=".to_vec(),
 
             Token::Dot => b".".to_vec(),
+
+            Token::Attribute => b"attribute".to_vec(),
 
             // TODO: Temporary polyfill.
             _ => b"__POLYFILL__".to_vec(),

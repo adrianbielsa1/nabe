@@ -11,6 +11,7 @@ use crate::ExitStatement;
 use crate::ArgumentStatement;
 use crate::AssignmentStatement;
 use crate::ReturnStatement;
+use crate::AttributeStatement;
 use crate::Viewer;
 
 struct Generator {
@@ -35,6 +36,7 @@ impl Generator {
                 Statement::Type(data) => self.generate_type(&data),
                 Statement::Enum(data) => self.generate_enum(&data),
                 Statement::Variable(data) => self.generate_variable(&data),
+                Statement::Attribute(data) => self.generate_attribute(&data),
 
                 // TODO: Handle all cases.
                 _ => String::from("__POLYFILL__\n"),
@@ -100,6 +102,7 @@ impl Generator {
                 Statement::Constant(data) => self.generate_constant(data),
                 Statement::Variable(data) => self.generate_variable(data),
                 Statement::Exit(data) => self.generate_exit(data),
+                Statement::Attribute(data) => self.generate_attribute(&data),
 
                 // TODO: Handle all cases.
                 _ => String::from("__POLYFILL__\n"),
@@ -176,6 +179,7 @@ impl Generator {
                 Statement::Constant(data) => self.generate_constant(data),
                 Statement::Variable(data) => self.generate_variable(data),
                 Statement::Exit(data) => self.generate_exit(data),
+                Statement::Attribute(data) => self.generate_attribute(&data),
 
                 // TODO: Handle all cases.
                 _ => String::from("__POLYFILL__\n"),
@@ -324,6 +328,18 @@ impl Generator {
 
         generated_code.push_str("exit ");
         generated_code.push_str(&String::from_utf8_lossy(&data.block.get_lexeme()));
+        generated_code.push('\n');
+
+        return generated_code;
+    }
+
+    fn generate_attribute(&mut self, data: &AttributeStatement) -> String {
+        let mut generated_code = String::new();
+
+        generated_code.push_str("Attribute ");
+        generated_code.push_str(&String::from_utf8_lossy(&data.name.get_lexeme()));
+        generated_code.push_str(" = ");
+        generated_code.push_str(&String::from_utf8_lossy(&data.value.get_lexeme()));
         generated_code.push('\n');
 
         return generated_code;
