@@ -1,18 +1,5 @@
-use crate::Statement;
-use crate::TypeStatement;
-use crate::TypeAttributeStatement;
-use crate::EnumStatement;
-use crate::EnumAttributeStatement;
-use crate::VariableStatement;
-use crate::ConstantStatement;
-use crate::SubroutineStatement;
-use crate::FunctionStatement;
-use crate::ExitStatement;
-use crate::ArgumentStatement;
-use crate::AssignmentStatement;
-use crate::ReturnStatement;
-use crate::AttributeStatement;
-use crate::Viewer;
+use crate::statement::*;
+use crate::viewer::Viewer;
 
 struct Generator {
     statements: Viewer<Statement>,

@@ -1,16 +1,6 @@
-use crate::Token;
-use crate::Statement;
-use crate::TypeStatement;
-use crate::TypeAttributeStatement;
-use crate::VariableStatement;
-use crate::ConstantStatement;
-use crate::SubroutineStatement;
-use crate::FunctionStatement;
-use crate::ExitStatement;
-use crate::ArgumentStatement;
-use crate::AssignmentStatement;
-use crate::ReturnStatement;
-use crate::Viewer;
+use crate::token::Token;
+use crate::statement::*;
+use crate::viewer::Viewer;
 
 struct Block {
     name: Token,

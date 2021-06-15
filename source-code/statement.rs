@@ -1,4 +1,4 @@
-use crate::Token;
+use crate::token::Token;
 
 // TODO: `Variable` and `Argument` variant's kind should be `Option<Token>`
 // because VB6 treats untyped variables as if they were declared with the
