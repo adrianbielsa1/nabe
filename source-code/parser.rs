@@ -185,7 +185,7 @@ impl<'a> Parser<'a> {
         let name = self.consume(Token::Identifier(vec!()))?;
 
         let kind = match self.consume(Token::As) {
-            Some(_) => self.consume(Token::Identifier(vec!())),
+            Some(_) => Some(self.consume(Token::Identifier(vec!()))?),
             None => None,
         };
 
