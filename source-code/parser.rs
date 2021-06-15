@@ -18,7 +18,7 @@ impl<'a> Parser<'a> {
         let parsers = [
             Parser::parse_type, Parser::parse_variable, Parser::parse_constant,
             Parser::parse_subroutine, Parser::parse_function, Parser::parse_enum,
-            Parser::parse_attribute,
+            Parser::parse_attribute, Parser::parse_option,
         ];
 
         let mut statements = vec!();
@@ -403,6 +403,32 @@ impl<'a> Parser<'a> {
 
         return Some(Statement::Attribute(AttributeStatement {
             name: name,
+            value: value,
+        }));
+    }
+
+    fn parse_option(&mut self) -> Option<Statement> {
+        let _ = self.consume(Token::Option)?;
+
+        // TODO: Use `parse_expression`?
+        let possible_configurations = [
+            Token::Explicit, Token::Base, Token::Compare, Token::Private,
+        ];
+
+        // NOTE: See `parse_variable`.
+        let configuration = std::array::IntoIter::new(possible_configurations).find_map(|t| self.consume(t))?;
+
+        let value = match configuration {
+            Token::Explicit => None,
+            Token::Base => Some(self.consume(Token::Number(vec!()))?),
+            Token::Compare => Some(self.consume(Token::Identifier(vec!()))?),
+            Token::Private => Some(self.consume(Token::Module)?),
+
+            _ => unreachable!(),
+        };
+
+        return Some(Statement::Option(OptionStatement {
+            configuration: configuration,
             value: value,
         }));
     }

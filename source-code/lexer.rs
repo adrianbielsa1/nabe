@@ -129,6 +129,12 @@ fn lex_identifier(characters: &Vec<u8>, position: &mut usize, tokens: &mut Vec<T
         "or" => Token::Or,
         "xor" => Token::Xor,
 
+        "option" => Token::Option,
+        "explicit" => Token::Explicit,
+        "base" => Token::Base,
+        "compare" => Token::Compare,
+        "module" => Token::Module,
+
         "attribute" => Token::Attribute,
 
         _ => Token::Identifier(lexeme),

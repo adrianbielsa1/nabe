@@ -64,6 +64,12 @@ pub enum Token {
     Assignment,
     Dot,
 
+    Option,
+    Explicit,
+    Base,
+    Compare,
+    Module,
+
     // Metadata.
     Attribute,
 }
@@ -108,6 +114,12 @@ impl Token {
             Token::GreaterOrEqual => b">=".to_vec(),
 
             Token::Dot => b".".to_vec(),
+
+            Token::Option => b"option".to_vec(),
+            Token::Explicit => b"explicit".to_vec(),
+            Token::Base => b"base".to_vec(),
+            Token::Compare => b"compare".to_vec(),
+            Token::Module => b"module".to_vec(),
 
             Token::Attribute => b"attribute".to_vec(),
 

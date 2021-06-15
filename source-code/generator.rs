@@ -23,6 +23,7 @@ impl Generator {
                 Statement::Type(data) => self.generate_type(&data),
                 Statement::Enum(data) => self.generate_enum(&data),
                 Statement::Variable(data) => self.generate_variable(&data),
+                Statement::Option(data) => self.generate_option(&data),
                 Statement::Attribute(data) => self.generate_attribute(&data),
 
                 // TODO: Handle all cases.
@@ -315,6 +316,22 @@ impl Generator {
 
         generated_code.push_str("exit ");
         generated_code.push_str(&String::from_utf8_lossy(&data.block.get_lexeme()));
+        generated_code.push('\n');
+
+        return generated_code;
+    }
+
+    fn generate_option(&mut self, data: &OptionStatement) -> String {
+        let mut generated_code = String::new();
+
+        generated_code.push_str("option ");
+        generated_code.push_str(&String::from_utf8_lossy(&data.configuration.get_lexeme()));
+
+        if let Some(value) = &data.value {
+            generated_code.push(' ');
+            generated_code.push_str(&String::from_utf8_lossy(&value.get_lexeme()));
+        }
+
         generated_code.push('\n');
 
         return generated_code;
