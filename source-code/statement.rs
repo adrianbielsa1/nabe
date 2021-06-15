@@ -65,6 +65,7 @@ pub struct ConstantStatement {
     pub scope: Token,
     pub name: Token,
     pub kind: Option<Token>,
+    pub length: Option<Token>,
     pub value: Token,
 }
 

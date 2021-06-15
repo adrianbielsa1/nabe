@@ -290,6 +290,16 @@ impl Generator {
             None => (),
         }
 
+        // TODO: This seems too imperative.
+        match &data.length {
+            Some(length) => {
+                generated_code.push_str(" * ");
+                generated_code.push_str(&String::from_utf8_lossy(&length.get_lexeme()));
+            },
+
+            None => (),
+        }
+
         generated_code.push_str(" = ");
         generated_code.push_str(&String::from_utf8_lossy(&data.value.get_lexeme()));
 

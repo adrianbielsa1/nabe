@@ -189,6 +189,11 @@ impl<'a> Parser<'a> {
             None => None,
         };
 
+        let length = match self.consume(Token::Times) {
+            Some(_) => Some(self.consume(Token::Number(vec!()))?),
+            None => None,
+        };
+
         let _ = self.consume(Token::Assignment)?;
 
         // TODO: Remove `vec!`.
@@ -203,6 +208,7 @@ impl<'a> Parser<'a> {
             scope: scope.clone(),
             name: name,
             kind: kind,
+            length: length,
             value: value,
         }));
     }
