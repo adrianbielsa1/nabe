@@ -110,7 +110,7 @@ impl<'a> Parser<'a> {
         let possible_scopes = [Token::Public, Token::Private];
 
         // NOTE: See `parse_variable`.
-        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t));
+        let scope = std::iter::IntoIterator::into_iter(possible_scopes).find_map(|t| self.consume(t));
 
         // Assert there is a `Enum` keyword and a identifier containing the
         // enumeration's name.
@@ -159,7 +159,7 @@ impl<'a> Parser<'a> {
         // so, to avoid using vectors, we can directly construct the `IntoIter`
         // iterator. I like to think that this solution is VERY slightly more efficient,
         // but I haven't tested it.
-        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t))?;
+        let scope = std::iter::IntoIterator::into_iter(possible_scopes).find_map(|t| self.consume(t))?;
 
         // TODO: Remove `vec!`.
         let name = self.consume(Token::Identifier(vec!()))?;
@@ -177,7 +177,7 @@ impl<'a> Parser<'a> {
         let possible_scopes = [Token::Public, Token::Private, Token::Static, Token::Dim];
 
         // NOTE: See `parse_variable`.
-        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t))?;
+        let scope = std::iter::IntoIterator::into_iter(possible_scopes).find_map(|t| self.consume(t))?;
 
         let _ = self.consume(Token::Const)?;
 
@@ -202,7 +202,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
+        let value = std::iter::IntoIterator::into_iter(possible_values).find_map(|t| self.consume(t))?;
 
         return Some(Statement::Constant(ConstantStatement {
             scope: scope.clone(),
@@ -217,7 +217,7 @@ impl<'a> Parser<'a> {
         let possible_scopes = [Token::Public, Token::Private, Token::Static];
 
         // NOTE: See `parse_variable`.
-        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t))?;
+        let scope = std::iter::IntoIterator::into_iter(possible_scopes).find_map(|t| self.consume(t))?;
 
         let _ = self.consume(Token::Sub)?;
 
@@ -252,7 +252,7 @@ impl<'a> Parser<'a> {
         let possible_scopes = [Token::Public, Token::Private, Token::Static];
 
         // NOTE: See `parse_variable`.
-        let scope = std::array::IntoIter::new(possible_scopes).find_map(|t| self.consume(t))?;
+        let scope = std::iter::IntoIterator::into_iter(possible_scopes).find_map(|t| self.consume(t))?;
 
         let _ = self.consume(Token::Function)?;
 
@@ -294,7 +294,7 @@ impl<'a> Parser<'a> {
         let possible_modifiers = [Token::ByVal, Token::ByRef,];
 
         // NOTE: See `parse_variable`.
-        let modifier = std::array::IntoIter::new(possible_modifiers).find_map(|t| self.consume(t));
+        let modifier = std::iter::IntoIterator::into_iter(possible_modifiers).find_map(|t| self.consume(t));
 
         // TODO: Remove `vec!`.
         let name = self.consume(Token::Identifier(vec!()))?;
@@ -353,7 +353,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let right = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
+        let right = std::iter::IntoIterator::into_iter(possible_values).find_map(|t| self.consume(t))?;
 
         return Some(Statement::Assignment(AssignmentStatement {
             left: left,
@@ -370,7 +370,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let block = std::array::IntoIter::new(possible_blocks).find_map(|t| self.consume(t))?;
+        let block = std::iter::IntoIterator::into_iter(possible_blocks).find_map(|t| self.consume(t))?;
 
         return Some(Statement::Exit(ExitStatement {
             block: block,
@@ -386,7 +386,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t));
+        let value = std::iter::IntoIterator::into_iter(possible_values).find_map(|t| self.consume(t));
 
         return Some(Statement::Return(ReturnStatement {
             value: value,
@@ -405,7 +405,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let value = std::array::IntoIter::new(possible_values).find_map(|t| self.consume(t))?;
+        let value = std::iter::IntoIterator::into_iter(possible_values).find_map(|t| self.consume(t))?;
 
         return Some(Statement::Attribute(AttributeStatement {
             name: name,
@@ -422,7 +422,7 @@ impl<'a> Parser<'a> {
         ];
 
         // NOTE: See `parse_variable`.
-        let configuration = std::array::IntoIter::new(possible_configurations).find_map(|t| self.consume(t))?;
+        let configuration = std::iter::IntoIterator::into_iter(possible_configurations).find_map(|t| self.consume(t))?;
 
         let value = match configuration {
             Token::Explicit => None,
